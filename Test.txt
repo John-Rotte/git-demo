@@ -1,6 +1,7 @@
 package com.laborationer.laboration1;
 import java.util.Scanner;
 
+//Lite kommentarer för att testa git
 
 public class Laboration1 {
     public static void main(String[] args) {
