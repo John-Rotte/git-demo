@@ -1,0 +1,133 @@
+package com.laborationer.laboration1;
+import java.util.Scanner;
+
+
+public class Laboration1 {
+    public static void main(String[] args) {
+        //Decleration of variables
+
+        int highScore[] = new int [3];
+        int sidesOfDice = 6;
+        int diceThrows, computerDiceRoll, playerDiceRoll, gameScorePlayer, gameScoreComputer;
+        int sumOfPlayerDiceRoll = 0;
+        int sumOfComputerDiceRoll = 0;
+        int winnerState;
+
+
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Welcome to dice game 1001! You can always input 0 to exit");
+        //Runs game until player enters 0 throws
+        do{
+            System.out.println("How many dice throws would you like to play?");
+            diceThrows = scan.nextInt();
+
+            //Plays the amounts of throws and writes our results and sum of throws
+            for(int i = 1; i <= diceThrows; i++){
+
+                //Throws the dice for player and computer
+                playerDiceRoll =(int)(1+(Math.random()* sidesOfDice));
+                computerDiceRoll =(int)(1+(Math.random()* sidesOfDice));
+
+                //Adds roll to total sum of rolls
+                sumOfPlayerDiceRoll += playerDiceRoll;
+                sumOfComputerDiceRoll += computerDiceRoll;
+
+                System.out.println("Round " +i+ " Player rolled: "+playerDiceRoll+"  Computer rolled:"+computerDiceRoll);
+                System.out.println("Player score: "+sumOfPlayerDiceRoll+"  Computer Score:"+sumOfComputerDiceRoll);
+                System.out.println();
+
+
+            }
+            //If you win
+            if(sumOfPlayerDiceRoll > sumOfComputerDiceRoll){
+                instruktioner(1,sumOfPlayerDiceRoll,sumOfComputerDiceRoll);
+                sortHighscore(highScore, sumOfPlayerDiceRoll );
+            }
+            //If you loose
+            else if(sumOfPlayerDiceRoll < sumOfComputerDiceRoll){
+                instruktioner(2,sumOfPlayerDiceRoll,sumOfComputerDiceRoll );
+                sortHighscore(highScore, sumOfPlayerDiceRoll );
+            }
+
+            //If even
+            else if(sumOfComputerDiceRoll == sumOfPlayerDiceRoll && sumOfComputerDiceRoll != 0){
+                instruktioner(3, sumOfPlayerDiceRoll,sumOfComputerDiceRoll);
+                sortHighscore(highScore, sumOfPlayerDiceRoll );
+            }
+
+            //Writes out the high score
+            System.out.print("The high score is: ");
+            for(int j= highScore.length -1;j>=0;j--){
+                System.out.print(highScore[j]+ " ");
+            }
+            System.out.println();
+            sumOfComputerDiceRoll=0;sumOfPlayerDiceRoll=0;
+        }while(diceThrows != 0);
+
+        //Resets summed values for next game
+
+    }
+    //Switch that is called by the end of all throws to see who won and update high score
+    //Instruktioner writes out who won and the scores
+    public static void instruktioner(int winnerState, int sumOfPlayerDiceRoll, int sumOfComputerDiceRoll){
+        switch(winnerState){
+            //Your score > computers score = you win
+            case 1:
+                System.out.println("Your final score is: "+sumOfPlayerDiceRoll+" the computers final score is: "+sumOfComputerDiceRoll);
+                System.out.println("You win!");
+                break;
+
+                //Your score < computers score = you loose
+            case 2:
+                System.out.println("Your final score is: "+sumOfPlayerDiceRoll+" the computers final score is: "+sumOfComputerDiceRoll);
+                System.out.println("You loose!");
+                break;
+
+                //Your score == computers score --> No one wins
+            case 3:
+                System.out.println("Your final score is: "+sumOfPlayerDiceRoll+" the computers final score is: "+sumOfComputerDiceRoll);
+                System.out.println("No one wins!");
+                break;
+
+        }
+    }
+    public static void sortHighscore(int[] highScore, int sumOfPlayerDiceRoll){
+        //If inserted score is higher than lowest score, replace lowest score
+        if(sumOfPlayerDiceRoll > highScore[0]){
+            highScore[0] = sumOfPlayerDiceRoll;
+        }
+
+        //if score is equal to lowest score check higher scores & if lower value is found replace it
+        else if(sumOfPlayerDiceRoll == highScore[0]){
+            for(int j=1; j < highScore.length && highScore[j] == sumOfPlayerDiceRoll ;j++){
+                if(sumOfPlayerDiceRoll > highScore[j]){
+                    highScore[j] = sumOfPlayerDiceRoll;
+                }
+            }
+
+
+        }
+
+        int i;
+        // Jämförelsetalet sparas i en temporär variabel
+        int temporary;
+        // Skrivs över om vi högerskiftar talen till vänster om det
+        for (int n = 1; n < highScore.length; n++) {
+            temporary = highScore[n];
+            i = n - 1;
+
+            // Jämförelsetalet jämförs med talen till vänster.
+            // Avbryts bara av ett mindre tal eller om talen tar slut
+            while (i >= 0 && highScore[i] > temporary) {
+                highScore[i + 1] = highScore[i]; // Förskjuts åt höger
+                i--;
+
+            }
+            // Jämförelsetalet infogas på det senaste indexet som högerskiftades (den tomma platsen)
+            highScore[i + 1] = temporary;
+        }
+    }
+
+
+}
